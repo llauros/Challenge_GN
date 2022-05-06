@@ -54,9 +54,14 @@ public class UserController {
     public ResponseEntity<UserPresenter> create(@RequestBody UserParameter parameter) {
 
         if (parameter != null) {
-            User model = parameter.toModel();
-
-            return new ResponseEntity(new UserPresenter(this.service.create(model)), HttpStatus.CREATED);
+            
+            User model = this.service.create(parameter.toModel());
+            
+            if(model != null) {
+            	return new ResponseEntity(new UserPresenter(this.service.create(model)), HttpStatus.CREATED);
+            } else {
+            	 return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }     
         }
 
         return new ResponseEntity(HttpStatus.OK);
@@ -70,7 +75,7 @@ public class UserController {
             user.setId(id);
 
             User result = this.service.update(user);
-
+    
             if (result != null) {
                 return new ResponseEntity(new UserPresenter(result), HttpStatus.CREATED);
             } else {

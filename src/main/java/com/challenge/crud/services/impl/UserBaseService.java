@@ -2,6 +2,8 @@ package com.challenge.crud.services.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,63 +17,105 @@ import com.challenge.crud.services.UserService;
 @Service
 public class UserBaseService implements UserService {
 
-    @Autowired
-    private UserRepository repository;
+	@Autowired
+	private UserRepository repository;
 
-    @Override
-    public List<User> findAll() {
-        List<UserEntity> entity = this.repository.findAll();
+	@Override
+	public List<User> findAll() {
+		List<UserEntity> entity = this.repository.findAll();
 
-        if (entity != null && !entity.isEmpty()) {
-            return entity.stream().map(item -> item.toModel()).collect(Collectors.toList());
-        } else {
-            return null;
-        }
-    }
+		if (entity != null && !entity.isEmpty()) {
+			return entity.stream().map(item -> item.toModel()).collect(Collectors.toList());
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-    public User findById(Long id) {
-        Optional<UserEntity> entity = repository.findById(id);
+	@Override
+	public User findById(Long id) {
+		Optional<UserEntity> entity = repository.findById(id);
 
-        if (entity.isPresent()) {
-            return entity.get().toModel();
-        }
-        return null;
-    }
+		if (entity.isPresent()) {
+			return entity.get().toModel();
+		}
+		return null;
+	}
 
-    @Override
-    public User create(User user) {
-        UserEntity entity = repository.save(new UserEntity(user));
+	@Override
+	public User create(User user) {
 
-        return entity.toModel();
-    }
+		// return repository.save(new UserEntity(user)).toModel();
 
-    @Override
-    public User update(User model) {
+		if (user != null) {
 
-        return repository.findById(model.getId()).map(result -> {
+			if (validatePassword(user.getPassword())) {
 
-            result.setName(model.getName());
-            result.setEmail(model.getEmail());
-            result.setPassword(model.getPassword());
+				UserEntity entity = repository.save(new UserEntity(user));
+				return entity.toModel();
+			}
+		}
 
-            return repository.save(result).toModel();
-        }).orElseGet(() -> {
-            return null;
-        });
+		return null;
+	}
 
-    }
+	@Override
+	public User update(User user) {
 
-    @Override
-    public boolean deleteById(Long id) {
+		if (user != null) {
 
-        Optional<UserEntity> result = repository.findById(id);
+			if ( !validatePassword(user.getPassword()) ) {
+				return null;
+			}
 
-        if (result.isPresent()) {
-            repository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
+			return repository.findById(user.getId()).map(result -> {
+
+				result.setName(user.getName());
+				result.setEmail(user.getEmail());
+				result.setPassword(user.getPassword());
+
+				return repository.save(result).toModel();
+			}).orElseGet(() -> {
+				return null;
+			});
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean deleteById(Long id) {
+
+		Optional<UserEntity> result = repository.findById(id);
+
+		if (result.isPresent()) {
+			repository.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean validatePassword(String password) {
+
+		if (password != null && password.length() <= 20) {
+
+			// Verificar se é isso que o enunciado
+			for (int i = 1; i < password.length(); i++) {
+				if (password.charAt(i) == password.charAt(i - 1)) {
+					return false;
+				}
+			}
+
+			String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%¨&^(*)_+=!?+-/.<>])(?=\\S+$).{9,20}$";
+
+			Pattern p = Pattern.compile(regex);
+
+			Matcher m = p.matcher(password);
+
+			return m.matches();
+		}
+
+		return false;
+	}
 
 }
