@@ -13,12 +13,11 @@ public class UserParameter {
 	@Length(min = 3, max = 100)
 	private String name;
 
-	@NotNull @NotEmpty
 	@Email
 	private String email;
 	
 	@NotNull @NotEmpty
-	@Length(min = 3, max = 100)
+	@Length(min = 8, max = 100)
 	private String password;
 
 	public String getName() {
