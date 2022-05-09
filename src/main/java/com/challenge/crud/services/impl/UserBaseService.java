@@ -23,12 +23,14 @@ public class UserBaseService implements UserService {
 	@Override
 	public User create(User user) {
 
-		// return repository.save(new UserEntity(user)).toModel();
-
 		if (user != null) {
 			if (validatePassword(user.getPassword())) {
-				UserEntity entity = repository.save(new UserEntity(user));
-				return entity.toModel();
+				
+				Optional<UserEntity> result = repository.findByEmail(user.getEmail());
+				
+				if(result.isEmpty()) {
+					return repository.save(new UserEntity(user)).toModel();
+				}			
 			}
 		}
 

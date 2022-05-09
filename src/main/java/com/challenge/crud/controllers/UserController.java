@@ -33,7 +33,6 @@ public class UserController {
 			@RequestParam(value = "user-email", required = false) String userEmail,
 			@RequestParam(value = "user-name", required = false) String userName) {
 
-		System.out.println("Nome: " + userName + "Email:  " + userEmail);
 		List<User> result = this.service.findByAttributes(userEmail, userName);
 
 		if (result != null) {
@@ -61,7 +60,7 @@ public class UserController {
 			User model = this.service.create(parameter.toModel());
 
 			if (model != null) {
-				return new ResponseEntity(new UserPresenter(this.service.create(model)), HttpStatus.CREATED);
+				return new ResponseEntity(new UserPresenter(model), HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity(HttpStatus.BAD_REQUEST);
 			}

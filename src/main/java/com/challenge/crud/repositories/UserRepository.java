@@ -1,6 +1,7 @@
 package com.challenge.crud.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,6 +23,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 	List<UserEntity> findByNameContainingIgnoreCaseOrderByName(String name);
 	
-	UserEntity findByEmail(String email);
+	Optional<UserEntity> findByEmail(String email);
 
 }
