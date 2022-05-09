@@ -1,45 +1,58 @@
 package com.challenge.crud.parameters;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 import com.challenge.crud.models.User;
 
 public class UserParameter {
 
-    private String name;
-    private String email;
-    private String password;
-    
-    public String getName() {
-        return name;
-    }
+	@NotNull @NotEmpty
+	@Length(min = 3, max = 100)
+	private String name;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	@NotNull @NotEmpty
+	@Email
+	private String email;
+	
+	@NotNull @NotEmpty
+	@Length(min = 3, max = 100)
+	private String password;
 
-    public String getEmail() {
-        return email;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public User toModel() {
-        User model = new User();
+	public String getPassword() {
+		return password;
+	}
 
-        model.setName(this.name);
-        model.setEmail(this.email);
-        model.setPassword(this.password);
-        
-        return model;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public User toModel() {
+		User model = new User();
+
+		model.setName(this.name);
+		model.setEmail(this.email);
+		model.setPassword(this.password);
+
+		return model;
+	}
 
 }

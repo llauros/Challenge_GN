@@ -3,6 +3,8 @@ package com.challenge.crud.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +55,7 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<UserPresenter> create(@RequestBody UserParameter parameter) {
+	public ResponseEntity<UserPresenter> create(@RequestBody @Valid UserParameter parameter) {
 
 		if (parameter != null) {
 
@@ -62,7 +64,7 @@ public class UserController {
 			if (model != null) {
 				return new ResponseEntity(new UserPresenter(model), HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity(HttpStatus.OK);
 			}
 		}
 
