@@ -21,35 +21,12 @@ public class UserBaseService implements UserService {
 	private UserRepository repository;
 
 	@Override
-	public List<User> findAll() {
-		List<UserEntity> entity = this.repository.findAll();
-
-		if (entity != null && !entity.isEmpty()) {
-			return entity.stream().map(item -> item.toModel()).collect(Collectors.toList());
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public User findById(Long id) {
-		Optional<UserEntity> entity = repository.findById(id);
-
-		if (entity.isPresent()) {
-			return entity.get().toModel();
-		}
-		return null;
-	}
-
-	@Override
 	public User create(User user) {
 
 		// return repository.save(new UserEntity(user)).toModel();
 
 		if (user != null) {
-
 			if (validatePassword(user.getPassword())) {
-
 				UserEntity entity = repository.save(new UserEntity(user));
 				return entity.toModel();
 			}
@@ -63,7 +40,7 @@ public class UserBaseService implements UserService {
 
 		if (user != null) {
 
-			if ( !validatePassword(user.getPassword()) ) {
+			if (!validatePassword(user.getPassword())) {
 				return null;
 			}
 
@@ -84,6 +61,38 @@ public class UserBaseService implements UserService {
 	}
 
 	@Override
+	public User findById(Long id) {
+		Optional<UserEntity> entity = repository.findById(id);
+
+		if (entity.isPresent()) {
+			return entity.get().toModel();
+		}
+		return null;
+	}
+	
+	@Override
+	public List<User> findByAttributes(String userEmail, String userName) {
+
+		List<UserEntity> entity = null;
+
+		if (userName == null && userEmail == null) {
+			entity = this.repository.findAll();
+		} else {
+			if (userName != null) {
+				userName = userName.concat("%");
+			}
+
+			entity = this.repository.findUserByEmailAndNameOrderByName(userEmail, userName);
+		}
+
+		if (entity != null && !entity.isEmpty()) {
+			return entity.stream().map(item -> item.toModel()).collect(Collectors.toList());
+		} else {
+			return null;
+		}
+	}
+
+	@Override
 	public boolean deleteById(Long id) {
 
 		Optional<UserEntity> result = repository.findById(id);
@@ -97,24 +106,21 @@ public class UserBaseService implements UserService {
 
 	private boolean validatePassword(String password) {
 
-		if (password != null && password.length() <= 20) {
+		if (password != null && password.length() <= 30) {
 
-			// Verificar se é isso que o enunciado
+			// Verificar se é isso que o enunciado pede
 			for (int i = 1; i < password.length(); i++) {
 				if (password.charAt(i) == password.charAt(i - 1)) {
 					return false;
 				}
 			}
-
+			
 			String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%¨&^(*)_+=!?+-/.<>])(?=\\S+$).{9,20}$";
-
 			Pattern p = Pattern.compile(regex);
-
 			Matcher m = p.matcher(password);
 
 			return m.matches();
 		}
-
 		return false;
 	}
 

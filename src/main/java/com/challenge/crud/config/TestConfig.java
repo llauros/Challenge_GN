@@ -22,7 +22,7 @@ public class TestConfig implements CommandLineRunner  {
 		// TODO Auto-generated method stub
 		UserEntity u1 = new UserEntity("Mirella Isabelle", "email.com", "123");
 		
-		repository.save(u1);
+		//repository.save(u1);
 	}
 
 }
