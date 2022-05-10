@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 					+ "WHERE LOWER(TRIM(tu.email)) = LOWER(TRIM(ifnull(:userEmail, tu.email))) "
 					+ "AND LOWER(TRIM(tu.nome)) LIKE LOWER(TRIM(ifnull(:userName, tu.nome))) ",
 					nativeQuery = true)
-	Page<UserEntity> findUserByEmailAndNameOrderByName(
+	Page<UserEntity> findUserByEmailAndName(
 			@Param("userEmail") String userEmail,
 			@Param("userName") String userName,
 			Pageable pageable);

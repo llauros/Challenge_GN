@@ -1,11 +1,11 @@
 package com.challenge.crud.controllers;
 
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,10 +34,9 @@ public class UserController {
 	public ResponseEntity<UserPresenter> findByAttributes(
 			@RequestParam(value = "user-email", required = false) String userEmail,
 			@RequestParam(value = "user-name", required = false) String userName,
-			@RequestParam(value = "page", defaultValue = "0") int page,
-			@RequestParam(value = "size", defaultValue = "10") int size) {
+			@PageableDefault(page = 0, size = 10) Pageable pageable) {
 
-		Page<User> result = this.service.findByAttributes(userEmail, userName, page, size);
+		Page<User> result = this.service.findByAttributes(userEmail, userName, pageable);
 
 		if (result != null) {
 			return new ResponseEntity(result.map(a -> new UserPresenter(a)), HttpStatus.OK);

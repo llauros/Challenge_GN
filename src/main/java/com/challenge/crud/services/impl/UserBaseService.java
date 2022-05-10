@@ -1,14 +1,13 @@
 package com.challenge.crud.services.impl;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +23,7 @@ public class UserBaseService implements UserService {
 	private UserRepository repository;
 
 	@Override
+	@CacheEvict(value = "userList", allEntries = true)
 	public User create(User user) {
 
 		if (user != null) {
@@ -41,6 +41,7 @@ public class UserBaseService implements UserService {
 	}
 
 	@Override
+	@CacheEvict(value = "userList", allEntries = true)
 	public User update(User user) {
 
 		if (user != null) {
@@ -75,10 +76,10 @@ public class UserBaseService implements UserService {
 	}
 	
 	@Override
-	public Page<User> findByAttributes(String userEmail, String userName, int page, int size) {
+	@Cacheable(value = "userList")
+	public Page<User> findByAttributes(String userEmail, String userName, Pageable pageable) {
 
 		Page<UserEntity> entity = null;
-		Pageable pageable = PageRequest.of(page, size);
 
 		if (userName == null && userEmail == null) {
 			entity = this.repository.findAll(pageable);
@@ -87,7 +88,7 @@ public class UserBaseService implements UserService {
 				userName = userName.concat("%");
 			}
 
-			entity = this.repository.findUserByEmailAndNameOrderByName(userEmail, userName, pageable);
+			entity = this.repository.findUserByEmailAndName(userEmail, userName, pageable);
 		}
 
 		if (entity != null && !entity.isEmpty()) {
@@ -98,6 +99,7 @@ public class UserBaseService implements UserService {
 	}
 
 	@Override
+	@CacheEvict(value = "userList", allEntries = true)
 	public boolean deleteById(Long id) {
 
 		Optional<UserEntity> result = repository.findById(id);
