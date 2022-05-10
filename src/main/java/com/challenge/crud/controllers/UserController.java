@@ -51,7 +51,7 @@ public class UserController {
 		if (result != null) {
 			return new ResponseEntity(new UserPresenter(result), HttpStatus.OK);
 		}
-		return new ResponseEntity(HttpStatus.NO_CONTENT);
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
 	@PostMapping
@@ -85,7 +85,7 @@ public class UserController {
 			}
 		}
 
-		return new ResponseEntity(HttpStatus.NO_CONTENT);
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
 	@DeleteMapping("/{id}")
@@ -96,7 +96,7 @@ public class UserController {
 			return new ResponseEntity(HttpStatus.OK);
 		}
 
-		return new ResponseEntity(HttpStatus.NO_CONTENT);
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
 	}
 
 }
