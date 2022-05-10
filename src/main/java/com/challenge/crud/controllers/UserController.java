@@ -1,11 +1,11 @@
 package com.challenge.crud.controllers;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,13 +33,14 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<UserPresenter> findByAttributes(
 			@RequestParam(value = "user-email", required = false) String userEmail,
-			@RequestParam(value = "user-name", required = false) String userName) {
+			@RequestParam(value = "user-name", required = false) String userName,
+			@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size) {
 
-		List<User> result = this.service.findByAttributes(userEmail, userName);
+		Page<User> result = this.service.findByAttributes(userEmail, userName, page, size);
 
 		if (result != null) {
-			return new ResponseEntity(result.stream().map(a -> new UserPresenter(a)).collect(Collectors.toList()),
-					HttpStatus.OK);
+			return new ResponseEntity(result.map(a -> new UserPresenter(a)), HttpStatus.OK);
 		}
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
 	}
@@ -64,7 +65,7 @@ public class UserController {
 			if (model != null) {
 				return new ResponseEntity(new UserPresenter(model), HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity(HttpStatus.OK);
+				return new ResponseEntity(HttpStatus.BAD_REQUEST);
 			}
 		}
 
@@ -82,8 +83,6 @@ public class UserController {
 
 			if (result != null) {
 				return new ResponseEntity(new UserPresenter(result), HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity(HttpStatus.NO_CONTENT);
 			}
 		}
 

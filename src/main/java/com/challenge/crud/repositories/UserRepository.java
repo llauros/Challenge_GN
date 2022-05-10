@@ -3,6 +3,8 @@ package com.challenge.crud.repositories;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,13 +18,18 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	@Query(value = "SELECT * FROM tb_usuario tu "
 			+ "WHERE LOWER(TRIM(tu.email)) = LOWER(TRIM(ifnull(:userEmail, tu.email))) "
 			+ "AND LOWER(TRIM(tu.nome)) LIKE LOWER(TRIM(ifnull(:userName, tu.nome))) "
-			+ "ORDER BY tu.nome", nativeQuery = true)
-	List<UserEntity> findUserByEmailAndNameOrderByName(
+			+ "ORDER BY tu.nome",
+			countQuery = "SELECT count(*) FROM tb_usuario tu "
+					+ "WHERE LOWER(TRIM(tu.email)) = LOWER(TRIM(ifnull(:userEmail, tu.email))) "
+					+ "AND LOWER(TRIM(tu.nome)) LIKE LOWER(TRIM(ifnull(:userName, tu.nome))) ",
+					nativeQuery = true)
+	Page<UserEntity> findUserByEmailAndNameOrderByName(
 			@Param("userEmail") String userEmail,
-			@Param("userName") String userName);
+			@Param("userName") String userName,
+			Pageable pageable);
 
 	List<UserEntity> findByNameContainingIgnoreCaseOrderByName(String name);
-	
+
 	Optional<UserEntity> findByEmail(String email);
 
 }

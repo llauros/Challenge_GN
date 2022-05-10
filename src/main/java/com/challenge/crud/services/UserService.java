@@ -1,6 +1,6 @@
 package com.challenge.crud.services;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import com.challenge.crud.models.User;
 
@@ -12,7 +12,7 @@ public interface UserService {
     
     public User findById(Long id);
 	
-	public List<User> findByAttributes(String userEmail, String userName);
+	public Page<User> findByAttributes(String userEmail, String userName, int page, int size);
 
     public boolean deleteById(Long id);
 	

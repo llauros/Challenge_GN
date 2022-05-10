@@ -13,6 +13,7 @@ public class UserParameter {
 	@Length(min = 3, max = 100)
 	private String name;
 
+	@NotEmpty
 	@Email
 	private String email;
 	

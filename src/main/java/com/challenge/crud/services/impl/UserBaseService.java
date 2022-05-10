@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.challenge.crud.entities.UserEntity;
@@ -56,7 +59,6 @@ public class UserBaseService implements UserService {
 			}).orElseGet(() -> {
 				return null;
 			});
-
 		}
 
 		return null;
@@ -73,22 +75,23 @@ public class UserBaseService implements UserService {
 	}
 	
 	@Override
-	public List<User> findByAttributes(String userEmail, String userName) {
+	public Page<User> findByAttributes(String userEmail, String userName, int page, int size) {
 
-		List<UserEntity> entity = null;
+		Page<UserEntity> entity = null;
+		Pageable pageable = PageRequest.of(page, size);
 
 		if (userName == null && userEmail == null) {
-			entity = this.repository.findAll();
+			entity = this.repository.findAll(pageable);
 		} else {
 			if (userName != null) {
 				userName = userName.concat("%");
 			}
 
-			entity = this.repository.findUserByEmailAndNameOrderByName(userEmail, userName);
+			entity = this.repository.findUserByEmailAndNameOrderByName(userEmail, userName, pageable);
 		}
 
 		if (entity != null && !entity.isEmpty()) {
-			return entity.stream().map(item -> item.toModel()).collect(Collectors.toList());
+			return entity.map(item -> item.toModel());
 		} else {
 			return null;
 		}
