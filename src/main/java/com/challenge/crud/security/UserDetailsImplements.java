@@ -26,7 +26,7 @@ public class UserDetailsImplements implements UserDetails {
 	}
 	
 	@ManyToMany(fetch = FetchType.EAGER)
-	private List<Profile> profiles;
+	private List<Role> profiles;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-public class Profile implements GrantedAuthority{
+public class Role implements GrantedAuthority{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -29,12 +29,11 @@ public class Profile implements GrantedAuthority{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 	@Override
 	public String getAuthority() {
-		// TODO Auto-generated method stub
-		return this.name = name;
+		return this.name;
 	}
+	
 	
 	
 	
