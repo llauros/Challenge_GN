@@ -1,5 +1,7 @@
 package com.challenge.crud.parameters;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 public class UserAuthParameter {
 	
 	private String email;
@@ -16,6 +18,11 @@ public class UserAuthParameter {
 	}   
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public UsernamePasswordAuthenticationToken convert() {
+		System.out.println(email + " D " + password);
+		return new UsernamePasswordAuthenticationToken(email, password);
 	}
 
 
