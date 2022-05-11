@@ -11,7 +11,7 @@ import com.challenge.crud.repositories.UserRepository;
 
 @Component
 @Configuration
-@Profile("test")
+@Profile("dev")
 public class TestConfig implements CommandLineRunner  {
 
 	@Autowired
