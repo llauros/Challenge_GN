@@ -131,4 +131,14 @@ public class UserBaseService implements UserService {
 		return false;
 	}
 
+	@Override
+	public User findByEmail(String email) {
+		Optional<UserEntity> entity = repository.findByEmail(email);
+
+		if (entity.isPresent()) {
+			return entity.get().toModel();
+		}
+		return null;
+	}
+
 }

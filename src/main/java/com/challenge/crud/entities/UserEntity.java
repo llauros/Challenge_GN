@@ -1,13 +1,18 @@
 package com.challenge.crud.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.challenge.crud.models.User;
+import com.challenge.crud.security.Role;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -25,14 +30,19 @@ public class UserEntity {
 
 	@Column(name = "senha")
 	private String password;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	private List<Role> roles;
 
-	public UserEntity() {
-	}
+	public UserEntity() {}
 
 	public UserEntity(User model) {
 		this.name = model.getName();
 		this.email = model.getEmail();
 		this.password = model.getPassword();
+		if(model.getRoles() != null) {
+			this.roles = model.getRoles();
+		}
 	}
 
 	public UserEntity(String name, String email, String password) {
@@ -72,6 +82,14 @@ public class UserEntity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
 
 	public User toModel() {
 		User model = new User();
@@ -80,6 +98,7 @@ public class UserEntity {
 		model.setName(this.name);
 		model.setEmail(this.email);
 		model.setPassword(this.password);
+		model.setRoles(this.roles);
 
 		return model;
 	}

@@ -16,5 +16,7 @@ public interface UserService {
 	public Page<User> findByAttributes(String userEmail, String userName, Pageable pageable);
 
     public boolean deleteById(Long id);
+    
+    public User findByEmail(String email);
 	
 }
