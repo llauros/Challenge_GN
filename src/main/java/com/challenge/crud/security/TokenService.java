@@ -20,8 +20,6 @@ public class TokenService {
 	@Value("${challengecrud.jwt.secret}")
 	private String secret;
 	
-	
-	
 	public String generateToken(Authentication authentication) {
 		UserDetailsImplements loggedUser = (UserDetailsImplements) authentication.getPrincipal();
 		
@@ -30,7 +28,7 @@ public class TokenService {
 		
 		return Jwts.builder()
 				.setIssuer("API_do_Desafio_GN")
-				.setSubject("1")
+				.setSubject(loggedUser.getId().toString())
 				.setIssuedAt(moment)
 				.setExpiration(expirationDate)
 				.signWith(SignatureAlgorithm.HS256, secret)

@@ -1,10 +1,19 @@
 package com.challenge.crud.parameters;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class UserAuthParameter {
 	
+	@Email
 	private String email;
+	
+	/*@NotNull @NotEmpty
+	@Length(min = 8, max = 100)*/
 	private String password;
 	
 	public String getEmail() {
@@ -21,7 +30,6 @@ public class UserAuthParameter {
 	}
 	
 	public UsernamePasswordAuthenticationToken convert() {
-		System.out.println(email + " D " + password);
 		return new UsernamePasswordAuthenticationToken(email, password);
 	}
 

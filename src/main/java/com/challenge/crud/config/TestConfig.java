@@ -20,7 +20,7 @@ public class TestConfig implements CommandLineRunner  {
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
-		UserEntity u1 = new UserEntity("Lucas Lauro", "lucaslauro@live.com", "lucas123");
+		UserEntity u1 = new UserEntity("admin", "admin@admin.com", "123456");
 		
 		//repository.save(u1);
 	}

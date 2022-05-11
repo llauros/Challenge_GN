@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.challenge.crud.parameters.UserAuthParameter;
+import com.challenge.crud.presenters.TokenPresenter;
 import com.challenge.crud.security.TokenService;
 
 @RestController
@@ -27,35 +28,22 @@ public class AuthenticationController {
 	private TokenService tokenService;
 	
 	@PostMapping
-	public ResponseEntity<?> authenticate(@RequestBody @Valid UserAuthParameter parameter) {
+	public ResponseEntity<TokenPresenter> authenticate(@RequestBody @Valid UserAuthParameter parameter) {
+
+		UsernamePasswordAuthenticationToken loginData = parameter.convert();		
 		
-		/**
-		 * 
-		 */
-		
-		System.out.println(parameter.getEmail() + " " + parameter.getPassword());
-		UsernamePasswordAuthenticationToken loginData = parameter.convert();
-		
-		
-		Authentication authentication = authManager.authenticate(loginData);
-		
-		String token = tokenService.generateToken(authentication);
-		
-		System.out.println(token);
-		
-		return ResponseEntity.ok().build();
-		
-		/*try {
+		try {
 			Authentication authentication = authManager.authenticate(loginData);
+			
 			String token = tokenService.generateToken(authentication);
 			
 			System.out.println(token);
 			
-			return ResponseEntity.ok().build();
-			
+			return ResponseEntity.ok(new TokenPresenter(token, "Bearer"));
 		} catch (AuthenticationException e) {
+			
 			return ResponseEntity.badRequest().build();
-		}*/
+		}
 	
 	}
 }

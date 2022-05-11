@@ -29,12 +29,10 @@ public class Role implements GrantedAuthority{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	@Override
 	public String getAuthority() {
 		return this.name;
 	}
-	
-	
-	
 	
 }

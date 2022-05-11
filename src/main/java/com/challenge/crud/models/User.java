@@ -1,5 +1,9 @@
 package com.challenge.crud.models;
 
+import java.util.List;
+
+import com.challenge.crud.security.Role;
+
 public class User {
 
 	private Long id;
@@ -9,6 +13,8 @@ public class User {
 	private String email;
 	
 	private String password;
+	
+	private List<Role> roles;
 
 	
 	public Long getId() {
@@ -41,6 +47,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 
 }

@@ -13,40 +13,48 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
 public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private AuthenticationService authenticationService;
 	
-	@Override
 	@Bean
+	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
 	
+	/**
+	 * Configuração de autenticação
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(authenticationService)
 		.passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
+	/**
+	 * Configurações de autorização.
+	 * Configuração de URLs
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		//http.authorizeHttpRequests().antMatchers("/app").permitAll();
+		
 		http.authorizeHttpRequests()
 		.antMatchers(HttpMethod.GET, "/users").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
-		.antMatchers(HttpMethod.POST, "/app/*").permitAll()
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	
+	/**
+	 * Configuração de arquivos estaticos
+	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-
 	}
 	
 }

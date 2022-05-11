@@ -3,26 +3,22 @@ package com.challenge.crud.security;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.challenge.crud.models.User;
 
 public class UserDetailsImplements implements UserDetails {
-
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
 	private String email;
 	private String password;
-	@ManyToMany(fetch = FetchType.EAGER)
-	private List<Role> profiles;
+	private List<Role> roles;
 	
 	public UserDetailsImplements(User model) {
 		if(model != null) {
+			this.id = model.getId();
 			this.email = model.getEmail();
 			this.password = model.getPassword();
 		}
@@ -63,7 +59,7 @@ public class UserDetailsImplements implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.profiles;
+		return this.roles;
 	}
 	@Override
 	public String getPassword() {
