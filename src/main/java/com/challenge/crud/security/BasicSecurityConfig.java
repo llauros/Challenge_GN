@@ -3,6 +3,7 @@ package com.challenge.crud.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,6 +19,7 @@ import com.challenge.crud.services.UserService;
 
 @Configuration
 @EnableWebSecurity
+@Profile(value = {"prod", "test"})
 public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
@@ -54,6 +56,10 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeHttpRequests()
 		.antMatchers(HttpMethod.GET, "/users").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
+		.antMatchers(HttpMethod.POST, "/users").permitAll()
+		.antMatchers("/h2-console").permitAll()
+		.antMatchers("/h2-console/*").permitAll()
+		.antMatchers("/h2-console/**").permitAll()
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -65,6 +71,7 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**", "/h2-console/**", "/h2-console", "/h2-console/*");
 	}
 	
 }

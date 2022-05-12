@@ -34,7 +34,7 @@ public class UserController {
 	public ResponseEntity<UserPresenter> findByAttributes(
 			@RequestParam(value = "user-email", required = false) String userEmail,
 			@RequestParam(value = "user-name", required = false) String userName,
-			@PageableDefault(page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(page = 0, size = 50) Pageable pageable) {
 
 		Page<User> result = this.service.findByAttributes(userEmail, userName, pageable);
 
