@@ -56,7 +56,10 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeHttpRequests()
 		.antMatchers(HttpMethod.GET, "/users").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
-		.antMatchers(HttpMethod.GET, "/app").permitAll()
+		.antMatchers(HttpMethod.POST, "/users").permitAll()
+		.antMatchers("/h2-console").permitAll()
+		.antMatchers("/h2-console/*").permitAll()
+		.antMatchers("/h2-console/**").permitAll()
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -68,7 +71,7 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**");
+		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**", "/h2-console/**", "/h2-console", "/h2-console/*");
 	}
 	
 }

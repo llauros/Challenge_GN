@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.challenge.crud.entities.UserEntity;
@@ -32,6 +33,11 @@ public class UserBaseService implements UserService {
 				Optional<UserEntity> result = repository.findByEmail(user.getEmail());
 				
 				if(result.isEmpty()) {
+					
+					BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+					String encryptedPassword = encoder.encode(user.getPassword());
+					user.setPassword(encryptedPassword);
+					
 					return repository.save(new UserEntity(user)).toModel();
 				}			
 			}
@@ -54,7 +60,11 @@ public class UserBaseService implements UserService {
 
 				result.setName(user.getName());
 				result.setEmail(user.getEmail());
-				result.setPassword(user.getPassword());
+				
+				BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+				String encryptedPassword = encoder.encode(user.getPassword());
+				
+				result.setPassword(encryptedPassword);
 
 				return repository.save(result).toModel();
 			}).orElseGet(() -> {
