@@ -13,7 +13,7 @@ import com.challenge.crud.repositories.UserRepository;
 
 @Component
 @Configuration
-@Profile("dev")
+@Profile(value = {"dev", "prod", "test"})
 public class TestConfig implements CommandLineRunner  {
 
 	@Autowired
