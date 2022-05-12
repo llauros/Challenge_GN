@@ -30,6 +30,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 	List<UserEntity> findByNameContainingIgnoreCaseOrderByName(String name);
 
+	List<UserEntity> findByName(String name);
+	
 	Optional<UserEntity> findByEmail(String email);
 
 }

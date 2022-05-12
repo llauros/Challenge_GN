@@ -19,7 +19,7 @@ import com.challenge.crud.services.UserService;
 
 @Configuration
 @EnableWebSecurity
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired

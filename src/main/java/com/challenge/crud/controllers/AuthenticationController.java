@@ -20,7 +20,7 @@ import com.challenge.crud.security.TokenService;
 
 @RestController
 @RequestMapping("/auth")
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 public class AuthenticationController {
 
 	@Autowired
